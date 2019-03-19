@@ -30,12 +30,39 @@ class myAddScreen extends StatefulWidget {
 class _MyHomePageState extends State<myAddScreen> {
   int count = 0;
   List<String> litems = [];
-  var textEditingControllers = <TextEditingController>[];
+  
+
+  
+
   final myController = TextEditingController();
   Contact contact;
   var data = "";
-  @override  initState() {
+
+
+  List<String> initialData = new List(); 
+  List<TextEditingController> textControllers = [];
+
+
+  @override  
+  void initState() {
+    super.initState();
+
+    
+    initialData.add("AYEKPA ABLE DANIEL");
+    initialData.add("fff@gmail.com");
+    initialData.add("ddddd@gmail.com");
+    initialData.add("MANC KOUL");
+    print(initialData);
+
+    initialData.forEach((i){
+      var textEditingController = new TextEditingController(text: "$i");
+      textControllers.add(textEditingController);
+    });
+    
   }
+
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -58,30 +85,22 @@ class _MyHomePageState extends State<myAddScreen> {
     );
   }
   List<Widget> createTexttextfields (){
-    List <String> list =  new List();
-
-    list.add("AYEKPA ABLE DANIEL");
-    list.add("fff@gmail.com");
-    list.add("ddddd@gmail.com");
-    list.add("MANC KOUL");
-    print(list);
+    
     var textFields = <Container>[];
-    list.forEach((i) {
-      var textEditingController = new TextEditingController(text: "$i");
-      textEditingControllers.add(textEditingController);
+    textControllers.forEach((controller) {
       return textFields.add( new Container(
               color: Colors.white,
               child: ListTile(
                 leading: const Icon(Icons.phone),
-                title:new TextField(controller: textEditingController,
-                  onEditingComplete: (){
-                    toaster("hgcgkjjjjjjjjjjjjjjjjjjj");
-                    setState(() {
-                      toaster(textEditingController.text);
-                      print("--------------NEWVALUE-------------"+textEditingController.text);
-                    });
+                title:new TextField(controller: controller,
+                  // onEditingComplete: (){
+                  //   toaster("hgcgkjjjjjjjjjjjjjjjjjjj");
+                  //   setState(() {
+                  //     toaster(controller.text);
+                  //     print("--------------NEWVALUE-------------"+controller.text);
+                  //   });
 
-                  },
+                  // },
                 ),
               )
       ));
@@ -89,7 +108,7 @@ class _MyHomePageState extends State<myAddScreen> {
     return textFields;
   }
   getAllValue(){
-    textEditingControllers.forEach((f){
+    textControllers.forEach((f){
       print(f.text);
     });
   }
@@ -98,12 +117,12 @@ class _MyHomePageState extends State<myAddScreen> {
     int resul;
     bool upade = false;
     var db = new DatabaseHelper();
-    textEditingControllers.forEach((f){
+    textControllers.forEach((f){
 
     });
     var j = 0;
-    for(var i = 0 ;i<textEditingControllers.length;i++){
-      var contat = new Contact(textEditingControllers[i].text, "20/12/1991","2");
+    for(var i = 0 ;i<textControllers.length;i++){
+      var contat = new Contact(textControllers[i].text, "20/12/1991","2");
       resul =  await db.saveContact(contat);
       if(resul != 0){
         j++;
